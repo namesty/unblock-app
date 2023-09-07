@@ -7,7 +7,6 @@ import {
   ServerError,
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
-import { onError } from "@apollo/client/link/error";
 import { GRAPHQL_API_URL } from "./constants";
 import { useUserStore } from "./stores/userStore";
 
@@ -17,11 +16,7 @@ const httpLink = createHttpLink({
 
 const authLink = setContext((_, { headers }) => {
   const userStoreState = useUserStore.getState();
-  let bearerToken = useUserStore.getState().authToken;
-
-  if (!bearerToken) {
-    bearerToken = userStoreState.magicDIDToken;
-  }
+  let bearerToken = userStoreState.magicDIDToken;
 
   return {
     headers: {
