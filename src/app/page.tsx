@@ -1,9 +1,23 @@
 "use client";
 
 import useMagicLogin from "@/hooks/useMagicLogin";
+import useCreateSession from "@/mutations/useCreateSession";
+import { useUserStore } from "@/stores/userStore";
 
 export default function Home() {
   const { connect } = useMagicLogin();
+  const { magicDIDToken } = useUserStore();
+  const { mutateAsync } = useCreateSession();
+
+  const onPressEnter = async (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      if (!magicDIDToken) {
+        await connect();
+      }
+
+      console.log(await mutateAsync());
+    }
+  };
 
   return (
     <main className="flex min-h-screen flex-col">
@@ -32,11 +46,7 @@ export default function Home() {
           </span>
           <input
             className="bg-blue border h-16 rounded-md w-full p-3 pr-[72px]"
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                connect();
-              }
-            }}
+            onKeyDown={onPressEnter}
           />
         </div>
       </div>

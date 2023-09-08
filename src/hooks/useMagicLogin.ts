@@ -13,6 +13,7 @@ const useMagic = () => {
     await magic.wallet
       .connectWithUI()
       .on("id-token-created", async ({ idToken }) => {
+        console.log("idToken", idToken);
         setMagicDIDToken(idToken);
       });
 
