@@ -1,23 +1,20 @@
 "use client";
 
 import useMagicLogin from "@/hooks/useMagicLogin";
-import useCreateSession from "@/mutations/useCreateSession";
-import { useUserStore } from "@/stores/userStore";
+import useCreateConversation from "@/mutations/useCreateConversation";
+import { useState } from "react";
 
 export default function Home() {
   const { connect } = useMagicLogin();
-  const { magicDIDToken } = useUserStore();
-  const { mutateAsync } = useCreateSession();
+  const { mutate, data, isLoading, error } = useCreateConversation();
+  const [inputValue, setinputValue] = useState<string>("");
 
   const onPressEnter = async (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      if (!magicDIDToken) {
-        await connect();
-      }
-
-      console.log(await mutateAsync());
-    }
+    if (e.key !== "Enter") return;
+    mutate({ prompt: inputValue });
   };
+
+  console.log({ data, isLoading, error });
 
   return (
     <main className="flex min-h-screen flex-col">
@@ -47,6 +44,8 @@ export default function Home() {
           <input
             className="bg-blue border h-16 rounded-md w-full p-3 pr-[72px]"
             onKeyDown={onPressEnter}
+            onChange={(e) => setinputValue(e.target.value)}
+            value={inputValue}
           />
         </div>
       </div>

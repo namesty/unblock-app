@@ -17,7 +17,7 @@ const useMagic = () => {
         setMagicDIDToken(idToken);
       });
 
-    const metadata = await magic.user.getMetadata();
+    const metadata = await magic.user.getInfo();
     setMagicUserMetadata(metadata);
   }, [setMagicDIDToken, setMagicUserMetadata]);
 

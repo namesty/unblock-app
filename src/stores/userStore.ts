@@ -1,8 +1,10 @@
+import { v4 as uuid } from "uuid";
 import { Magic, MagicUserMetadata } from "magic-sdk";
 import { create } from "zustand";
 import { createJSONStorage, devtools, persist } from "zustand/middleware";
 
 interface UserState {
+  xUserId: string;
   magicDIDToken: string | null;
   setMagicDIDToken: (token: string) => void;
   magicUserMetadata: MagicUserMetadata | null;
@@ -14,6 +16,7 @@ export const useUserStore = create<UserState>()(
   devtools(
     persist(
       (set) => ({
+        xUserId: uuid(),
         magicDIDToken: null,
         setMagicDIDToken: (token) => set((state) => ({ magicDIDToken: token })),
         magicUserMetadata: null,
